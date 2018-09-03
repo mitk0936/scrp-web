@@ -11,7 +11,13 @@ const getTenure = ($, $infobox) => {
       const title = $(textRow).html();
 
       if (title.match(/tenure/i)) {
-        value = $(textRow).next().find('p').html().trim();
+        const paragraph = $(textRow).next().find('p');
+        const directText = $(textRow).next().html();
+
+        value = paragraph && paragraph.length > 0 ?
+          paragraph.eq(0).html().trim() :
+          directText;
+
         return;
       }
   });
@@ -66,7 +72,7 @@ const getSalary = ($, $infobox) => {
 
           compensationItem = compensationItem.next();
         }
-        
+
         return;
       }
     });
