@@ -18,7 +18,7 @@ const createJSDOM = (html) => {
   return (jquery)(dom.window);
 };
 
-const start = (html) => {
+const run = ({ html }) => {
   const $ = createJSDOM(html);
   const infoBoxDomEl = $.find('.infobox')[0];
   const $infobox = $(infoBoxDomEl);
@@ -33,4 +33,4 @@ const start = (html) => {
   };
 };
 
-module.exports = { start };
+module.exports = { run };

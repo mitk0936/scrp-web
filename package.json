@@ -5,13 +5,42 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./src/index.js"
+    "start": "opn http://localhost:6543 && PORT=6543 node --inspect src/server/index"
   },
-  "author": "",
+  "author": "UNKNOWN",
   "license": "ISC",
   "devDependencies": {
     "curl": "^0.1.4",
     "jquery": "^3.3.1",
-    "jsdom": "^12.0.0"
+    "jsdom": "^12.0.0",
+    "prop-types": "^15.6.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "serialport": "^6.2.2",
+    "socket.io": "^2.0.4",
+    "socket.io-client": "^2.0.4",
+    "autoprefixer": "^6.0.3",
+    "babel-core": "^6.25.0",
+    "babel-loader": "^6.2.3",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "babel-preset-react-hmre": "^1.1.0",
+    "babel-preset-stage-3": "^6.24.1",
+    "cross-env": "^1.0.7",
+    "css-loader": "^0.19.0",
+    "express": "^4.13.3",
+    "extract-text-webpack-plugin": "^0.8.2",
+    "html-webpack-plugin": "^1.6.1",
+    "opn-cli": "^3.1.0",
+    "postcss-loader": "^0.6.0",
+    "rimraf": "^2.4.3",
+    "stats-webpack-plugin": "^0.2.1",
+    "style-loader": "^0.12.4",
+    "webpack": "^1.12.2",
+    "webpack-dev-middleware": "^1.2.0",
+    "webpack-hot-middleware": "^2.2.0"
   }
 }
