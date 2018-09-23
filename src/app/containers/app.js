@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import io from 'socket.io-client';
 import styles from '../resources/css/App.css';
 import Commands from './commands';
-import Console from './console';
+import LogItem from '../components/log-item/log-item';
 import { STATUS } from '../../constants';
+
+const MESSAGES_LIMIT = 3;
 
 class App extends React.Component {
   state = {
@@ -18,34 +20,43 @@ class App extends React.Component {
     return (
       <div className={styles.app}>
         <Commands
-          start={() => this.setStatus(STATUS.RUNNING)}
+          start={() => this.setState({ messages: [] }, () => this.setStatus(STATUS.RUNNING))}
           stop={() => this.setStatus(STATUS.IDLE)}
           status={this.state.status}
         />
-        <ul>
-        {
-          this.state.messages.map(({ type, message }) => (
-            <li>
-              Type: {type}, Message: {message}
-            </li>
-          ))
-        }
+        <ul className={styles.log}>
+            {
+              this.state.messages.map(({ type, message, json }) =>
+                <LogItem
+                  key={`${type}-${message}`}
+                  type={type}
+                  message={message}
+                  json={json}
+                />
+              )
+            }
         </ul>
       </div>
     );
   }
 
-  setStatus = (status) => this.socket.emit('status', {
-    status
-  })
+  setStatus = (status) => this.socket.emit('status', { status })
   
   componentDidMount () {
-    this.socket = io(`http://127.0.0.1:${process.env.PORT}`);
+    this.socket = io(`${process.env.HOST}:${process.env.PORT}`);
     this.socket.on('status', ({ status }) => this.setState({ status }));
-    this.socket.on('message', ({ type, message }) => this.setState({
-      messages: [...this.state.messages, { type, message }]
-    }))
+    this.socket.on('message', ({ type, message, json }) => {
+      const updatedMessages = [...this.state.messages, { type, message, json }];
+
+      if (updatedMessages.length > MESSAGES_LIMIT) {
+        // updatedMessages.shift();
+      }
+
+      this.setState({
+        messages: updatedMessages
+      });
+    })
   }
 };
-
+;
 export default App;

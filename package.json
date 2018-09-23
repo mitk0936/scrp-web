@@ -5,20 +5,28 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "opn http://localhost:6543 && PORT=6543 node --inspect src/server/index"
+    "start": "node src/server/index",
+    "start-dev": "opn http://localhost:6543 && HOST=http://localhost PORT=6543 node --inspect src/server/index"
   },
   "author": "UNKNOWN",
   "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
     "curl": "^0.1.4",
+    "express": "^4.13.3",
     "jquery": "^3.3.1",
     "jsdom": "^12.0.0",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-json-view": "^1.19.1",
     "serialport": "^6.2.2",
     "socket.io": "^2.0.4",
     "socket.io-client": "^2.0.4",
+    "webpack": "^1.12.2",
+    "webpack-dev-middleware": "^1.2.0",
+    "webpack-hot-middleware": "^2.2.0"
+  },
+  "devDependencies": {
     "autoprefixer": "^6.0.3",
     "babel-core": "^6.25.0",
     "babel-loader": "^6.2.3",
@@ -31,16 +39,12 @@
     "babel-preset-stage-3": "^6.24.1",
     "cross-env": "^1.0.7",
     "css-loader": "^0.19.0",
-    "express": "^4.13.3",
     "extract-text-webpack-plugin": "^0.8.2",
     "html-webpack-plugin": "^1.6.1",
     "opn-cli": "^3.1.0",
     "postcss-loader": "^0.6.0",
     "rimraf": "^2.4.3",
     "stats-webpack-plugin": "^0.2.1",
-    "style-loader": "^0.12.4",
-    "webpack": "^1.12.2",
-    "webpack-dev-middleware": "^1.2.0",
-    "webpack-hot-middleware": "^2.2.0"
+    "style-loader": "^0.12.4"
   }
 }

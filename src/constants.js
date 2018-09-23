@@ -1,6 +1,13 @@
 const STATUS = {
   RUNNING: 'running',
-  IDLE: 'idle'
+  IDLE: 'idle',
+  FINISHED: 'finished'
 };
 
-module.exports = { STATUS };
+const EVENT_TYPES = {
+  WARNING: 'warning',
+  SUCCESS: 'success',
+  FAILURE: 'failure'
+};
+
+module.exports = { STATUS, EVENT_TYPES };

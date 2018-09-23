@@ -1,3 +1,13 @@
 .fieldset {
-	padding: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.button {
+  display: block;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  cursor: pointer;
 }

@@ -6,41 +6,52 @@ const run = ({
   onLoadStarted,
   onLoaded,
   onRequestFailed,
-  getCurrentStatus
+  getCurrentStatus,
+  onQueueFinished
 }) => {
   let allURLs = [...urls];
+  let requestedTailCount = 0;
 
   const getURLs = (count) => allURLs.splice(0, count);
+  const appendUrl = (url) => allURLs.push(url);
 
-  const triggerLoadingData = (count = 5) => {
+  const loadData = (count = 5) => {
     if (getCurrentStatus() !== CONSTANTS.STATUS.RUNNING) {
       return;
     }
 
     const loadingURLs = getURLs(count);
 
+    if (loadingURLs.length === 0 && requestedTailCount === 0) {
+      onQueueFinished();
+    }
+
     loadingURLs.forEach((url) => {
       onLoadStarted(url);
 
-      pageLoad.load(url, (body) => {
-        if (getCurrentStatus() !== CONSTANTS.STATUS.RUNNING) {
-          return;
-        }
+      requestedTailCount++;
 
-        onLoaded(url, body);
-        triggerLoadingData(1);
-      }, () => {
-        if (getCurrentStatus() !== CONSTANTS.STATUS.RUNNING) {
-          return;
-        }
+      pageLoad.load({
+        url,
+        success: (body) => {
+          requestedTailCount--;
+          onLoaded(url, body);
+          loadData(1);
+        },
+        failure: (statusCode) => {
+          if (statusCode !== 404) {
+            appendUrl(url);
+          }
 
-        onRequestFailed(url);
-        triggerLoadingData(1);
+          requestedTailCount--;
+          onRequestFailed(url, statusCode);
+          loadData(1);
+        }
       });
     });
   };
 
-  return triggerLoadingData;
+  return { loadData };
 };
 
 module.exports = { run };

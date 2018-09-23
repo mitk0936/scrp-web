@@ -1,0 +1,25 @@
+.logItem {
+  padding: 6px;
+  color: #fff;
+  font-size: 11px;
+  border-bottom: 2px solid #fff;
+}
+
+.logItemWarning {
+  background-color: #FFEAA8;
+  color: #777;
+}
+
+.logItemFailure {
+  background-color: #ED533C;
+}
+
+.logItemSuccess {
+  background-color: #12AD59;
+}
+
+.dataContainer {
+  background-color: #fff;
+  padding: 6px;
+  margin-top: 6px;
+}

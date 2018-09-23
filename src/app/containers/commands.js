@@ -7,10 +7,10 @@ export class Commands extends React.Component {
   render () {
     return (
       <fieldset className={styles.fieldset}>
-        <legend>Control scrape service</legend>
+        <legend>Scrape service</legend>
         <table border="0">
           <tbody>
-              <tr>
+            <tr>
               <td>
                 Current status:
               </td>
@@ -19,10 +19,10 @@ export class Commands extends React.Component {
               </td>
             </tr>
             {
-              this.props.status === STATUS.IDLE && (
+              this.props.status !== STATUS.RUNNING && (
                 <tr>
                   <td>
-                    <button onClick={this.props.start}>
+                    <button className={styles.button} onClick={this.props.start}>
                       Start Script
                     </button>
                   </td>
@@ -33,7 +33,7 @@ export class Commands extends React.Component {
               this.props.status === STATUS.RUNNING && (
                 <tr>
                   <td>
-                    <button onClick={this.props.stop}>
+                    <button className={styles.button} onClick={this.props.stop}>
                       Cancel
                     </button>
                   </td>

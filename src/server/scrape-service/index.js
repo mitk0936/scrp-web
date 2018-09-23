@@ -29,7 +29,8 @@ const run = ({ html }) => {
     tenure: errorHandler(infoBoxScrapeHelpers.getTenure),
     yearsInPosition: errorHandler(infoBoxScrapeHelpers.getYearsInPosition),
     education: errorHandler(infoBoxScrapeHelpers.getEducation),
-    salary: errorHandler(infoBoxScrapeHelpers.getSalary)
+    salary: errorHandler(infoBoxScrapeHelpers.getSalary),
+    religion: errorHandler(infoBoxScrapeHelpers.getReligion)
   };
 };
 

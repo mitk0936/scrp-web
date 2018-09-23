@@ -84,13 +84,13 @@ const getEducation = ($, $infobox) => {
   let uniData = [];
 
   getTitleRows($infobox)
-    .each((index, educationSection) => {
-      const title = $(educationSection).find('p').html();
+    .each((index, section) => {
+      const title = $(section).find('p').html();
 
       if (title && title.match(/education/i)) {
         const values = [];
 
-        let educationItem = $(educationSection).next();
+        let educationItem = $(section).next();
 
         while (educationItem && !educationItem.hasClass('value-only')) {
           const degree = educationItem.find('.widget-key').html().trim();
@@ -108,10 +108,34 @@ const getEducation = ($, $infobox) => {
   return uniData;
 };
 
+const getReligion = ($, $infobox) => {
+  let religion = null;
+
+  getTitleRows($infobox)
+    .each((index, section) => {
+      const title = $(section).html();
+
+      if (title && title.match(/personal/i)) {
+        let personalItem = $(section).next();
+
+        while (personalItem && !personalItem.hasClass('value-only')) {
+          const personalInfoType = personalItem.find('.widget-key').html().trim();
+          if (personalInfoType.match(/religion/i)) {
+            religion = personalItem.find('.widget-value').html().trim();
+            return;
+          }
+        }
+      }
+    });
+
+  return religion;
+};
+
 module.exports = {
   getName,
   getTenure,
   getEducation,
   getYearsInPosition,
-  getSalary
+  getSalary,
+  getReligion
 };
