@@ -3,6 +3,7 @@ const CONSTANTS = require('../constants');
 const statusService = require('./status-service/index');
 const fetcherService = require('./fetcher-service/index');
 const scrapeService = require('./scrape-service/index');
+const fileService = require('./file-service/index');
 
 const mockedUrls = [
   'https://ballotpedia.org/George_W._Bush',
@@ -36,31 +37,39 @@ const run = (server) => {
       runningStatusStore.setStatus(status);
 
       if (scrapingStarted) {
-        const { loadData } = fetcherService.run({
-          urls: mockedUrls,
-          onLoadStarted: (url) => emitMessage({
-            type: CONSTANTS.EVENT_TYPES.WARNING,
-            message: `Fetching started (${url})`
-          }),
-          onLoaded: (url, body) => {
-            emitMessage({
-              type: CONSTANTS.EVENT_TYPES.SUCCESS,
-              message: `Data loaded successfully for (${url})`,
-              json: scrapeService.run({ html: body })
-            })
-          },
-          onRequestFailed: (url, statusCode) => {
-            emitMessage({
-              type: CONSTANTS.EVENT_TYPES.FAILURE,
-              message: `Failed to load (${url}), Status: ${statusCode}`
-            });
-          },
-          onQueueFinished: () =>
-            runningStatusStore.setStatus(CONSTANTS.STATUS.FINISHED),
-          getCurrentStatus: runningStatusStore.getStatus
-        });
+        const { saveFile } = fileService.run({
+          onOutputFolderCleaned: () => {
+            const { loadData } = fetcherService.run({
+              urls: mockedUrls,
+              onLoadStarted: (url) => emitMessage({
+                type: CONSTANTS.EVENT_TYPES.WARNING,
+                message: `Fetching started (${url})`
+              }),
+              onLoaded: (url, body) => {
+                const json = scrapeService.run({ html: body });
 
-        loadData();
+                emitMessage({
+                  type: CONSTANTS.EVENT_TYPES.SUCCESS,
+                  message: `Data loaded successfully for (${url})`,
+                  json
+                });
+
+                saveFile(url, JSON.stringify(json));
+              },
+              onRequestFailed: (url, statusCode) => {
+                emitMessage({
+                  type: CONSTANTS.EVENT_TYPES.FAILURE,
+                  message: `Failed to load (${url}), Status: ${statusCode}`
+                });
+              },
+              onQueueFinished: () =>
+                runningStatusStore.setStatus(CONSTANTS.STATUS.FINISHED),
+              getCurrentStatus: runningStatusStore.getStatus
+            });
+
+            loadData();
+          }
+        });
       }
     });
   });
