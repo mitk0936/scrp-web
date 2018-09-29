@@ -20,21 +20,23 @@ class App extends React.Component {
     return (
       <div className={styles.app}>
         <Commands
-          start={() => this.setState({ messages: [] }, () => this.setStatus(STATUS.RUNNING))}
+          start={() => this.setState({
+            messages: []
+          }, () => this.setStatus(STATUS.RUNNING))}
           stop={() => this.setStatus(STATUS.IDLE)}
           status={this.state.status}
         />
         <ul className={styles.log}>
-            {
-              this.state.messages.map(({ type, message, json }) =>
-                <LogItem
-                  key={`${type}-${message}`}
-                  type={type}
-                  message={message}
-                  json={json}
-                />
-              )
-            }
+          {
+            this.state.messages.map(({ type, message, json }) =>
+              <LogItem
+                key={`${type}-${message}`}
+                type={type}
+                message={message}
+                json={json}
+              />
+            )
+          }
         </ul>
       </div>
     );

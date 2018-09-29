@@ -3,18 +3,22 @@ const getTitleRows = ($infobox) => $infobox.eq(0).find('.widget-row.value-only')
 const getName = ($, $infobox) => getTitleRows($infobox).eq(0).html();
 
 const getTenure = ($, $infobox) => {
-  let value = null;
+  let tenure = null;
 
   $infobox
     .find('div:not(.widget-row)')
     .each((index, textRow) => {
+      if (tenure) {
+        return;
+      }
+
       const title = $(textRow).html();
 
       if (title.match(/tenure/i)) {
         const paragraph = $(textRow).next().find('p');
         const directText = $(textRow).next().html();
 
-        value = paragraph && paragraph.length > 0 ?
+        tenure = paragraph && paragraph.length > 0 ?
           paragraph.eq(0).html().trim() :
           directText;
 
@@ -22,24 +26,28 @@ const getTenure = ($, $infobox) => {
       }
   });
 
-  return value;
+  return tenure;
 };
 
 const getYearsInPosition = ($, $infobox) => {
-  let value = null;
+  let years = null;
 
   $infobox
     .find('div:not(.widget-row)')
     .each((index, textRow) => {
+      if (years) {
+        return;
+      }
+
       const title = $(textRow).html();
 
       if (title.match(/years.in.position/i)) {
-        value = $(textRow).next().find('p').html().trim();
+        years = $(textRow).next().find('p').html().trim();
         return;
       }
   });
 
-  return value;
+  return years;
 };
 
 const getSalary = ($, $infobox) => {
@@ -94,9 +102,9 @@ const getEducation = ($, $infobox) => {
 
         while (educationItem && !educationItem.hasClass('value-only')) {
           const degree = educationItem.find('.widget-key').html().trim();
-          const university = educationItem.find('.widget-value p').html().trim();
+          const institution = educationItem.find('.widget-value p').html().trim();
 
-          values.push([degree, university]);
+          values.push({ degree, institution });
           educationItem = educationItem.next();
         }
 
@@ -113,22 +121,59 @@ const getReligion = ($, $infobox) => {
 
   getTitleRows($infobox)
     .each((index, section) => {
+      if (religion) {
+        return;
+      }
+
       const title = $(section).html();
 
       if (title && title.match(/personal/i)) {
         let personalItem = $(section).next();
 
-        while (personalItem && !personalItem.hasClass('value-only')) {
-          const personalInfoType = personalItem.find('.widget-key').html().trim();
-          if (personalInfoType.match(/religion/i)) {
+        while (personalItem && !personalItem.hasClass('value-only') && personalItem.hasClass('widget-row')) {
+          const personalInfoType = personalItem.find('.widget-key').html();
+
+          if (personalInfoType && personalInfoType.trim().match(/religion/i)) {
             religion = personalItem.find('.widget-value').html().trim();
             return;
           }
+
+          personalItem = personalItem.next();
         }
       }
     });
 
   return religion;
+};
+
+const getProfession = ($, $infobox) => {
+  let profession = null;
+
+  getTitleRows($infobox)
+    .each((index, section) => {
+      if (profession) {
+        return;
+      }
+
+      const title = $(section).html();
+
+      if (title && title.match(/personal/i)) {
+        let personalItem = $(section).next();
+
+        while (personalItem && !personalItem.hasClass('value-only') && personalItem.hasClass('widget-row')) {
+          const personalInfoType = personalItem.find('.widget-key').html();
+
+          if (personalInfoType && personalInfoType.trim().match(/profession/i)) {
+            profession = personalItem.find('.widget-value').html().trim();
+            return;
+          }
+
+          personalItem = personalItem.next();
+        }
+      }
+    });
+
+  return profession;
 };
 
 module.exports = {
@@ -137,5 +182,6 @@ module.exports = {
   getEducation,
   getYearsInPosition,
   getSalary,
-  getReligion
+  getReligion,
+  getProfession
 };

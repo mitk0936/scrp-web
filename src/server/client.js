@@ -8,7 +8,12 @@ const fileService = require('./file-service/index');
 const mockedUrls = [
   'https://ballotpedia.org/George_W._Bush',
   'https://ballotpedia.org/Lisa_Murkowski',
-  'https://ballotpedia.org/Gosho'
+  'https://ballotpedia.org/Gosho',
+  'https://ballotpedia.org/Barack_Obama',
+  'https://ballotpedia.org/Donald_Trump',
+  'https://ballotpedia.org/Mike_Pence',
+  'https://ballotpedia.org/Margaret_Stock',
+  'https://ballotpedia.org/Joe_Miller'
 ];
 
 const run = (server) => {
@@ -46,15 +51,28 @@ const run = (server) => {
                 message: `Fetching started (${url})`
               }),
               onLoaded: (url, body) => {
-                const json = scrapeService.run({ html: body });
-
-                emitMessage({
-                  type: CONSTANTS.EVENT_TYPES.SUCCESS,
-                  message: `Data loaded successfully for (${url})`,
-                  json
+                const json = scrapeService.run({
+                  html: body,
+                  onError: (message) => emitMessage({
+                    type: CONSTANTS.EVENT_TYPES.FAILURE,
+                    message: `SCRIPT ERROR: ${message} (${url})`
+                  })
                 });
 
-                saveFile(url, JSON.stringify(json));
+                if (json) {
+                  emitMessage({
+                    type: CONSTANTS.EVENT_TYPES.SUCCESS,
+                    message: `Data loaded successfully for (${url})`,
+                    json
+                  });
+
+                  saveFile(url, JSON.stringify(json));
+                } else {
+                  emitMessage({
+                    type: CONSTANTS.EVENT_TYPES.FAILURE,
+                    message: `MISSING DATA for ${url}`
+                  });
+                }
               },
               onRequestFailed: (url, statusCode) => {
                 emitMessage({
@@ -62,8 +80,7 @@ const run = (server) => {
                   message: `Failed to load (${url}), Status: ${statusCode}`
                 });
               },
-              onQueueFinished: () =>
-                runningStatusStore.setStatus(CONSTANTS.STATUS.FINISHED),
+              onQueueFinished: () => runningStatusStore.setStatus(CONSTANTS.STATUS.FINISHED),
               getCurrentStatus: runningStatusStore.getStatus
             });
 
@@ -72,6 +89,7 @@ const run = (server) => {
         });
       }
     });
+    
   });
 };
 
