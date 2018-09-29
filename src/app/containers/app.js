@@ -6,7 +6,7 @@ import Commands from './commands';
 import LogItem from '../components/log-item/log-item';
 import { STATUS } from '../../constants';
 
-const MESSAGES_LIMIT = 3;
+const MESSAGES_LIMIT = 500;
 
 class App extends React.Component {
   state = {
@@ -15,6 +15,8 @@ class App extends React.Component {
   };
 
   socket = null;
+
+  setStatus = (status) => this.socket.emit('status', { status })
 
   render () {
     return (
@@ -41,8 +43,6 @@ class App extends React.Component {
       </div>
     );
   }
-
-  setStatus = (status) => this.socket.emit('status', { status })
   
   componentDidMount () {
     this.socket = io(`${process.env.HOST}:${process.env.PORT}`);
@@ -51,7 +51,7 @@ class App extends React.Component {
       const updatedMessages = [...this.state.messages, { type, message, json }];
 
       if (updatedMessages.length > MESSAGES_LIMIT) {
-        // updatedMessages.shift();
+        updatedMessages.shift();
       }
 
       this.setState({

@@ -49,7 +49,93 @@ const getCareer = ($, $mwContentText) => {
   return careerData;
 };
 
+const getComiteeListData = ($, $ulDomEl) => {
+  const children = [];
+
+  $ulDomEl.find('>li').each((index, child) => {
+    let childData = {
+      text: null,
+      items: []
+    };
+
+    const $childList = $(child).find('>ul');
+
+    if ($childList.length > 0) {
+      childData.items = getComiteeListData($, $childList);
+      childData.text = $(child).find('>a').text();
+    } else {
+      childData.text = $(child).text();
+    }
+
+    if (childData.items.length === 0) {
+      return children.push({
+        text: childData.text
+      });
+    }
+
+    children.push(childData);
+  });
+
+  return children;
+};
+
+const getComiteeAsignments = ($, $mwContentText) => {
+  let comiteeAssignments = null;
+
+  const titleSections = $mwContentText.find('>h2');
+
+  titleSections.each((index, titleSection) => {
+    if (comiteeAssignments) {
+      return;
+    }
+
+    if ($(titleSection).text().match(/Committee.assignments/)) {
+      const assignmentsTitle = commonHelpers.findNext($, titleSection, 'h3');
+      const firstLevelSections = assignmentsTitle.nextUntil('h3, h2', 'h4');
+      const items = [];
+
+      firstLevelSections.each((index, title) => {
+        const $title = $(title);
+
+        const item = {
+          title: $title.text(),
+          info: null,
+          items: []
+        };
+
+        let $nextEl = $title.next();
+
+        switch (true) {
+          case $nextEl.is('p'):
+            item.info = $nextEl.text();
+
+            if ($nextEl.next().is('ul')) {
+              item.items = getComiteeListData($, $nextEl.next());
+            }
+
+            break;
+          case $nextEl.is('ul'):
+            item.items = getComiteeListData($, $nextEl);
+            break;
+          default:
+            return null;
+        }
+        
+        items.push(item);
+      });
+
+      comiteeAssignments = {
+        title: assignmentsTitle.text(),
+        items
+      };
+    }
+  });
+
+  return comiteeAssignments;
+};
+
 module.exports = {
   getState,
-  getCareer
+  getCareer,
+  getComiteeAsignments
 };

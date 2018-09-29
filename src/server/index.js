@@ -21,7 +21,7 @@ const middleware = webpackMiddleware(
 app.use(middleware);
 app.use(webpackHotMiddleware(compiler));
 
-app.get('/', function response(req, res) {
+app.get('/*', function response(req, res) {
   res.write(
     middleware.fileSystem.readFileSync(
       require('path')

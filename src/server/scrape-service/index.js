@@ -49,7 +49,8 @@ const run = ({ html, onError }) => {
     salary: errorHandlerInfoBox(infoBoxScrapeHelpers.getSalary),
     religion: errorHandlerInfoBox(infoBoxScrapeHelpers.getReligion),
     profession: errorHandlerInfoBox(infoBoxScrapeHelpers.getProfession),
-    career: errorHandlerMwContent(mwContentScrapeHelpers.getCareer)
+    career: errorHandlerMwContent(mwContentScrapeHelpers.getCareer),
+    comiteeAssignments: errorHandlerMwContent(mwContentScrapeHelpers.getComiteeAsignments)
   };
 };
 

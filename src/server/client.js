@@ -10,6 +10,7 @@ const mockedUrls = [
   'https://ballotpedia.org/Lisa_Murkowski',
   'https://ballotpedia.org/Gosho',
   'https://ballotpedia.org/Barack_Obama',
+  'https://ballotpedia.org/John_McCain',
   'https://ballotpedia.org/Donald_Trump',
   'https://ballotpedia.org/Mike_Pence',
   'https://ballotpedia.org/Margaret_Stock',
