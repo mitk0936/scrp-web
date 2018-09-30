@@ -4,6 +4,7 @@ const statusService = require('./status-service/index');
 const fetcherService = require('./fetcher-service/index');
 const scrapeService = require('./scrape-service/index');
 const fileService = require('./file-service/index');
+const urlsService = require('../urls');
 
 const mockedUrls = [
   'https://ballotpedia.org/George_W._Bush',
@@ -14,8 +15,11 @@ const mockedUrls = [
   'https://ballotpedia.org/Donald_Trump',
   'https://ballotpedia.org/Mike_Pence',
   'https://ballotpedia.org/Margaret_Stock',
-  'https://ballotpedia.org/Joe_Miller'
+  'https://ballotpedia.org/Joe_Miller',
+  "https://ballotpedia.org/Tom_Anderson"
 ];
+
+const realUrls = urlsService.getUrls();
 
 const run = (server) => {
   const io = socketIo(server);
@@ -32,6 +36,11 @@ const run = (server) => {
     client.emit('status', {
       status: runningStatusStore.getStatus()
     });
+
+    emitMessage({
+      type: CONSTANTS.EVENT_TYPES.WARNING,
+      message: `All - ${realUrls.length}`
+    });
     
     client.on('status', ({ status }) => {
 
@@ -46,7 +55,7 @@ const run = (server) => {
         const { saveFile } = fileService.run({
           onOutputFolderCleaned: () => {
             const { loadData } = fetcherService.run({
-              urls: mockedUrls,
+              urls: realUrls, // mockedUrls,
               onLoadStarted: (url) => emitMessage({
                 type: CONSTANTS.EVENT_TYPES.WARNING,
                 message: `Fetching started (${url})`

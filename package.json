@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "opn http://localhost:6543 && HOST=http://localhost PORT=6543 node --inspect src/server/index"
+    "start": "opn http://localhost:6543 && HOST=http://localhost PORT=6543 node src/server/index"
   },
   "author": "UNKNOWN",
   "license": "ISC",

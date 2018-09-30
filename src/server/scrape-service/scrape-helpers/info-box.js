@@ -100,7 +100,7 @@ const getEducation = ($, $infobox) => {
 
         let educationItem = $(section).next();
 
-        while (educationItem && !educationItem.hasClass('value-only')) {
+        while (educationItem && educationItem.is('.widget-row') && !educationItem.hasClass('value-only')) {
           const degree = educationItem.find('.widget-key').html().trim();
           const institution = educationItem.find('.widget-value p').html().trim();
 
