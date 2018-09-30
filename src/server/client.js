@@ -11,12 +11,9 @@ const mockedUrls = [
   'https://ballotpedia.org/Lisa_Murkowski',
   'https://ballotpedia.org/Gosho',
   'https://ballotpedia.org/Barack_Obama',
-  'https://ballotpedia.org/John_McCain',
-  'https://ballotpedia.org/Donald_Trump',
-  'https://ballotpedia.org/Mike_Pence',
-  'https://ballotpedia.org/Margaret_Stock',
-  'https://ballotpedia.org/Joe_Miller',
-  "https://ballotpedia.org/Tom_Anderson"
+  "https://ballotpedia.org/Sharon_Trusty",
+  "https://ballotpedia.org/Barbara_Craft",
+  "https://ballotpedia.org/Donald_Trump"
 ];
 
 const realUrls = urlsService.getUrls();
@@ -55,7 +52,7 @@ const run = (server) => {
         const { saveFile } = fileService.run({
           onOutputFolderCleaned: () => {
             const { loadData } = fetcherService.run({
-              urls: realUrls, // mockedUrls,
+              urls: realUrls, // mockedUrls
               onLoadStarted: (url) => emitMessage({
                 type: CONSTANTS.EVENT_TYPES.WARNING,
                 message: `Fetching started (${url})`

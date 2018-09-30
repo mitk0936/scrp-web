@@ -63,7 +63,7 @@ const getSalary = ($, $infobox) => {
       if (title && title.match(/compensation/i)) {
         let compensationItem = $(compensationSection).next();
 
-        while (compensationItem && !compensationItem.hasClass('value-only')) {
+        while (compensationItem && compensationItem.is('.widget-row') && !compensationItem.hasClass('value-only')) {
           const $salaryType = compensationItem.find('.widget-key');
           const type = $salaryType && $salaryType.html().trim();
           
@@ -130,7 +130,7 @@ const getReligion = ($, $infobox) => {
       if (title && title.match(/personal/i)) {
         let personalItem = $(section).next();
 
-        while (personalItem && !personalItem.hasClass('value-only') && personalItem.hasClass('widget-row')) {
+        while (personalItem && !personalItem.hasClass('value-only') && personalItem.is('.widget-row')) {
           const personalInfoType = personalItem.find('.widget-key').html();
 
           if (personalInfoType && personalInfoType.trim().match(/religion/i)) {
@@ -160,7 +160,7 @@ const getProfession = ($, $infobox) => {
       if (title && title.match(/personal/i)) {
         let personalItem = $(section).next();
 
-        while (personalItem && !personalItem.hasClass('value-only') && personalItem.hasClass('widget-row')) {
+        while (personalItem && !personalItem.hasClass('value-only') && personalItem.is('.widget-row')) {
           const personalInfoType = personalItem.find('.widget-key').html();
 
           if (personalInfoType && personalInfoType.trim().match(/profession/i)) {

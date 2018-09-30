@@ -90,7 +90,22 @@ const getComiteeAsignments = ($, $mwContentText) => {
     }
 
     if ($(titleSection).text().match(/Committee.assignments/)) {
-      const assignmentsTitle = commonHelpers.findNext($, titleSection, 'h3');
+      const assignmentsTitle = commonHelpers.findNext($, titleSection, 'h3', 'h2');
+
+      if (!assignmentsTitle) {
+        const $infoText = $(titleSection).nextUntil('h2, h3, ul', 'p')
+        const $listOnly = $(titleSection).nextUntil('h2', 'ul');
+
+        if ($listOnly) {
+          comiteeAssignments = {
+            title: $infoText ? $infoText.text() : null,
+            items: getComiteeListData($, $listOnly)
+          };
+
+          return;
+        }
+      }
+
       const firstLevelSections = assignmentsTitle.nextUntil('h3, h2', 'h4');
       const items = [];
 

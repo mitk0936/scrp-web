@@ -15,7 +15,7 @@ const run = ({
   const getURLs = (count) => allURLs.splice(0, count);
   const appendUrl = (url) => allURLs.push(url);
 
-  const loadData = (count = 10) => {
+  const loadData = (count = 20) => {
     if (getCurrentStatus() !== CONSTANTS.STATUS.RUNNING) {
       return;
     }
